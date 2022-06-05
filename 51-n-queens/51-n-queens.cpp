@@ -1,48 +1,34 @@
 class Solution {
 public:
-//     vector<vector<string>> solveNQueens(int n) {
-//         set<int> c, d1, d2;
+    void fun(vector<vector<string>>& ans, vector<string>& temp, int r, set<int>& c, set<int>& d1,                set<int>& d2, int n) {
         
-//         vector<vector<string>> ans(n, vector<string> (n, "."));
-//         fun()
-//     }
-    bool canAddQueen(int row,int col,vector<vector<int>>&queens){
-        for(int i=0;i<queens.size();i++){
-            int dx=abs(row-queens[i][0]);
-            int dy=abs(col-queens[i][1]);
-            if(dx==0||dy==0||dx==dy)
-                return false;
+        if(r == n) {
+           ans.push_back(temp); 
         }
-        return true;
-    }
-    void solve(int row,vector<vector<string>> &res,vector<vector<char>> &temp,int n,vector<vector<int>>&queens){
-        if(queens.size()==n){
-            vector<string> tmp;
-            for(int i=0;i<n;i++){
-                string st="";
-                for(int j=0;j<temp[i].size();j++){
-                    st+=temp[i][j];
-                }
-                tmp.push_back(st);
+        
+        for(int i=0;i<n;i++) {
+            if(c.find(i) == c.end() && d1.find(r-i) == d1.end() && d2.find(r+i) == d2.end()) {
+                
+                c.insert(i); d1.insert(r-i); d2.insert(r+i);
+                
+                temp[r][i] = 'Q';
+                fun(ans, temp, r+1, c, d1, d2, n);
+                temp[r][i] = '.';
+                
+                c.erase(i); d1.erase(r-i); d2.erase(r+i);
             }
-            res.push_back(tmp);
-        }
-        for(int c=0;c<n;c++){
-            if(canAddQueen(row,c,queens)){
-                temp[row][c]='Q';
-                queens.push_back({row,c});
-                solve(row+1,res,temp,n,queens);
-                temp[row][c]='.';
-                queens.pop_back();
-            }
-            
         }
     }
+    
     vector<vector<string>> solveNQueens(int n) {
-        vector<vector<char>> temp(n,vector<char>(n,'.'));
-        vector<vector<string>> res;
-        vector<vector<int>> queens;
-        solve(0,res,temp,n,queens);
-        return res;
+        set<int> c, d1, d2;
+        string dots = "";
+        for(int i=0;i<n;i++) dots.push_back('.');
+        
+        vector<string> temp(n, dots);
+        vector<vector<string>> ans;
+        fun(ans, temp, 0, c, d1, d2, n);
+        
+        return ans;
     }
 };
