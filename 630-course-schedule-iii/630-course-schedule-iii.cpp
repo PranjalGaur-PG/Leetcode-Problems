@@ -1,25 +1,27 @@
 class Solution {
 public:
-    static bool cus_sort(vector<int> a, vector<int> b) {
-        return (a[1]<b[1]);
+    static bool cus_sort(pair<int, int> a, pair<int, int> b) {
+        return (a.second < b.second);
     }
     int scheduleCourse(vector<vector<int>>& c) {
-        // sort(c.begin(), c.end(), cus_sort);
-
-        sort(c.begin(), c.end(), [](const vector<int>& a, vector<int>& b) {
-            return a[1] < b[1];
-        });
+        vector<pair<int, int>> p;
         
-        priority_queue<int> q;
-        int sum = 0;
-        for(auto i : c) {
-            sum += i[0];
-            q.push(i[0]);
-            if(sum > i[1]) {
-                sum -= q.top();
-                q.pop();
+        for(auto it : c) p.push_back({it[0], it[1]});
+        
+        sort(p.begin(), p.end(), cus_sort);
+        
+        priority_queue<int> pq;
+        int time = 0;
+        for(auto it : p) {
+            time += it.first;
+            pq.push(it.first);
+            
+            if(time > it.second) {
+                time -= pq.top();
+                pq.pop();
             }
         }
-        return q.size();
+        
+        return pq.size();
     }
 };
