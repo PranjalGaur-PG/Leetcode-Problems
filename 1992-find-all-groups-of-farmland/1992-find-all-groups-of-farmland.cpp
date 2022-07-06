@@ -15,28 +15,18 @@ public:
 //                 }
 //             }
 //         }
-        int m = land.size();
-        int n = land[0].size();
-        vector<vector<int>> ans;
-        
-        for(int i=0; i<m; i++){
-            for(int j=0; j<n; j++){
-                if(land[i][j] == 1){
-                    int k = j, l = i;
-					// traversing in down and right direction until zero or end is hit
-                    while(l<m && land[l][j] == 1) l++;
-                    while(k<n && land[i][k] == 1) k++;
-                    l--;
-                    k--;
-                    ans.push_back({i, j, l, k});
-					// marking all the traversed farm to be visited
-                    for(int g = i; g<=l; g++){
-                        for(int h = j; h<=k; h++)
-                            land[g][h] = -1;
-                    }
+        int m = land.size(), n = land[0].size();
+        vector<vector<int>> res;
+        for (int i = 0; i < m; ++i)
+            for (int j = 0; j < n; ++j) {
+                if (land[i][j]) {
+                    int x = i, y = j;
+                    for (x = i; x < m && land[x][j]; ++x)
+                        for (y = j; y < n && land[x][y]; ++y)
+                            land[x][y] = 0;
+                    res.push_back({i, j, x - 1, y - 1});
                 }
             }
-        }
-        return ans;
+        return res;
     }
 };
