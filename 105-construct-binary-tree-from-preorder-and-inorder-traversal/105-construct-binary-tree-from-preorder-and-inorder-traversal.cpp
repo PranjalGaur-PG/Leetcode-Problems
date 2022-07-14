@@ -27,7 +27,7 @@ public:
             if(node->val==inorder[i])
             {
                 pos=i;
-                // break;
+                break;
             }
         }
         node->left=createTree(preorder,inorder,start,pos-1);
