@@ -1,28 +1,21 @@
 class Solution {
 public:
-        
-        int mod = 1000000007;
-    int kow[51][51][51];
-    long solve(int m, int n, int maxMove, int startRow, int startColumn){
-        if(startRow >= m or startRow < 0 or startColumn >= n or startColumn < 0){
-            return 1;
-        }
-        if(maxMove <= 0){
-            return 0;
-        }
-        if(kow[startRow][startColumn][maxMove] != -1){
-            return kow[startRow][startColumn][maxMove];
-        }
-        long count = 0;
-        count += solve(m, n, maxMove - 1, startRow - 1, startColumn);
-        count += solve(m, n, maxMove - 1, startRow, startColumn + 1);
-        count += solve(m, n, maxMove - 1, startRow + 1, startColumn);
-        count += solve(m, n, maxMove - 1, startRow, startColumn - 1);
-        return kow[startRow][startColumn][maxMove] = count%mod;
-    }
-    int findPaths(int m, int n, int maxMove, int startRow, int startColumn) {
-        memset(kow, -1, sizeof(kow));
-        return solve(m, n, maxMove, startRow, startColumn)%mod;
-    }
+    int mod = 1e9+7;
+    int dp[51][51][51];
     
+    long long fun(int n, int m, int mm, int sr, int sc) {
+        if(sr < 0 || sc < 0 || sr>= n || sc >= m) return 1;
+        if(mm <= 0) return 0;
+        
+        if(dp[sr][sc][mm] != -1) return dp[sr][sc][mm];
+        
+        return dp[sr][sc][mm] = ((fun(n,m,mm-1,sr,sc-1)%mod) + (fun(n,m,mm-1,sr,sc+1)%mod) + (fun(n,m,mm-1,sr-1,sc)%mod) + (fun(n,m,mm-1,sr+1,sc)%mod))%mod;
+    }
+        
+    int findPaths(int m, int n, int mm, int sr, int sc) {
+        memset(dp, -1, sizeof(dp));
+        
+        long long ans = fun(m, n, mm, sr, sc);
+        return int(ans % mod);
+    }
 };
