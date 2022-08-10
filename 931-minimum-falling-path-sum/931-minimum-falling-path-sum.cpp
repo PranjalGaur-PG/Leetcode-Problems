@@ -12,6 +12,7 @@ public:
         int mn = min(down, min(left, right));
         return dp[r][c] = (mat[r][c] + mn);
     }
+    
     int minFallingPathSum(vector<vector<int>>& mat) {
         int n = mat.size();
         
@@ -19,7 +20,19 @@ public:
         int ans = INT_MAX;
         
         for(int i=0;i<n;i++) {
-            ans = min(ans, rec(mat, dp, i, 0, n));
+            for(int j=0;j<n;j++) {
+                if(i==0) dp[i][j] = mat[i][j];
+                else {
+                    int u = dp[i-1][j];
+                    int l = INT_MAX, r = INT_MAX;
+                    if(j>0) l = dp[i-1][j-1];
+                    if(j<n-1) r=dp[i-1][j+1];
+                    
+                    dp[i][j] = min(u, min(l, r)) + mat[i][j];
+                }
+                
+                if(i==n-1) ans = min(ans, dp[i][j]);
+            }
         }
         
         return ans;
