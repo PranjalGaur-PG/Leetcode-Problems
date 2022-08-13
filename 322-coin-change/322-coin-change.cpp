@@ -2,7 +2,6 @@ class Solution {
 public:
     int rec(vector<int>& coins, int amt, int ind, vector<vector<int>>& dp) {
         
-        if(amt == 0) return 0;
         if(ind == 0) {
             if(amt%coins[ind] == 0) return amt/coins[ind];
             else return 1e6;
