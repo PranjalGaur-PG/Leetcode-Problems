@@ -19,10 +19,25 @@ public:
     int coinChange(vector<int>& coins, int amount) {
         int n = coins.size();
         
-        vector<vector<int>> dp(n, vector<int> (amount+1, -1));
-        int ans = rec(coins, amount, n-1, dp);
+        vector<vector<int>> dp(n, vector<int> (amount+1, 1e6));
+        // int ans = rec(coins, amount, n-1, dp);
         
-        if(ans >= 1e6) return -1;
-        return ans;
+        for(int i=0;i<n;i++) {
+            for(int j=0;j<=amount;j++) {
+                if(i==0) {
+                    if(j%coins[i] == 0) dp[i][j] = j/coins[i];
+                }
+                else {
+                    int t = 1e6;
+                    if(coins[i] <= j) t = 1 + dp[i][j-coins[i]];
+                    int nt = dp[i-1][j];
+
+                    dp[i][j] = min(t, nt);
+                }
+            }
+        }
+        
+        if(dp[n-1][amount] >= 1e6) return -1;
+        return dp[n-1][amount];
     }
 };
