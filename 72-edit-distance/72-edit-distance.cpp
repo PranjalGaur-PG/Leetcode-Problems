@@ -18,8 +18,25 @@ public:
         
     int minDistance(string s1, string s2) {
         int n = s1.size(), m = s2.size();
-        vector<vector<int>> dp(n, vector<int> (m, -1));
+        vector<vector<int>> dp(n+1, vector<int> (m+1, 0));
         
-        return rec(s1, s2, n-1, m-1, dp);
+        for(int i=0;i<=n;i++) {
+            for(int j=0;j<=m;j++) {
+                if(i==0) dp[i][j]=j;
+                else if(j==0) dp[i][j]=i;
+                
+                else if(s1[i-1]==s2[j-1]) dp[i][j] = dp[i-1][j-1];
+                else {
+                    int mvs = 1e6;
+                    mvs = min(mvs, dp[i-1][j]);
+                    mvs = min(mvs, dp[i][j-1]);
+                    mvs = min(mvs, dp[i-1][j-1]);
+
+                    dp[i][j] = 1+mvs;
+                }
+            }
+        }
+        
+        return dp[n][m];
     }
 };
