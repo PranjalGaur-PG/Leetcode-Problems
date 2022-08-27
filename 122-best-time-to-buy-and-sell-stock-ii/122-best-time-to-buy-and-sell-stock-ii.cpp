@@ -16,17 +16,16 @@ public:
     int maxProfit(vector<int>& pri) {
         
         int n = pri.size();
-        vector<vector<int>> dp(n+1, vector<int> (2, 0));
-        
-        dp[n][1] = dp[n][0] = 0;
+        vector<int> ahead(2, 0), cur(2, 0);
         
         for(int i=n-1;i>=0;i--) {
             for(int j=0;j<2;j++) {
-                if(j == 1) dp[i][j] = max(-pri[i] + dp[i+1][0], dp[i+1][1]);
-                else       dp[i][j] = max( pri[i] + dp[i+1][1], dp[i+1][0]);
+                if(j == 1) cur[j] = max(-pri[i] + ahead[0], ahead[1]);
+                else       cur[j] = max( pri[i] + ahead[1], ahead[0]);
             }
+            ahead = cur;
         }
         
-        return dp[0][1];
+        return ahead[1];
     }
 };
