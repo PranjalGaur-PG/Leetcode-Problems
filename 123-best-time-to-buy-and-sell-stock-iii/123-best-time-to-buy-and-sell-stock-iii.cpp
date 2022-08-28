@@ -15,18 +15,19 @@ public:
     int maxProfit(vector<int>& pri) {
         int n = pri.size();
         
-        vector<vector<vector<int>>> dp(n+1, vector<vector<int>> (2, vector<int> (3, 0)));
+        vector<vector<int>> after(2, vector<int> (3, 0));
+        vector<vector<int>> cur  (2, vector<int> (3, 0));
         
-        for(int i=n;i>=0;i--) {
+        for(int i=n-1;i>=0;i--) {
             for(int j=0;j<2;j++) {
-                for(int k=0;k<3;k++) {
-                    if(i == n || k == 0) dp[i][j][k] = 0;
-                    else if(j==1) dp[i][j][k] = max(-pri[i]+ dp[i+1][0][k], dp[i+1][1][k]);
-                    else dp[i][j][k] = max(pri[i]+ dp[i+1][1][k-1], dp[i+1][0][k]);
+                for(int k=1;k<3;k++) {
+                    if(j==1) cur[j][k] = max(-pri[i]+ after[0][k], after[1][k]);
+                    else cur[j][k] = max(pri[i]+ after[1][k-1], after[0][k]);
                 }
             }
+            after = cur;
         }
         
-        return dp[0][1][2];
+        return after[1][2];
     }
 };
