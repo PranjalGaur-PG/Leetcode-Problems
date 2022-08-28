@@ -1,21 +1,23 @@
 class Solution {
 public:
-    int maxProfit(int k, vector<int>& pri) {
-         int n = pri.size();
+    int rec(vector<int>& pri, int ind, int tnum, int k, vector<vector<int>>& dp) {
+        if(ind == pri.size() || tnum == 2*k) return 0;
         
-        vector<vector<int>> after(2, vector<int> (k+1, 0));
-        vector<vector<int>> cur  (2, vector<int> (k+1, 0));
+        if(dp[ind][tnum] != -1) return dp[ind][tnum];
         
-        for(int i=n-1;i>=0;i--) {
-            for(int j=0;j<2;j++) {
-                for(int x=1;x<=k;x++) {
-                    if(j==1) cur[j][x] = max(-pri[i]+ after[0][x], after[1][x]);
-                    else cur[j][x] = max(pri[i]+ after[1][x-1], after[0][x]);
-                }
-            }
-            after = cur;
+        if(tnum%2 == 0) {
+            return dp[ind][tnum] = max(-pri[ind]+ rec(pri,ind+1,tnum+1,k,dp), rec(pri,ind+1,tnum,k,dp));
         }
+        else {
+            return dp[ind][tnum] = max( pri[ind]+ rec(pri,ind+1,tnum+1,k,dp), rec(pri,ind+1,tnum,k,dp));
+        }
+    }
         
-        return after[1][k];
+    int maxProfit(int k, vector<int>& pri) {
+        int n = pri.size();
+        
+        vector<vector<int>> dp(n, vector<int> (2*k, -1));
+        
+        return rec(pri, 0, 0, k, dp);
     }
 };
