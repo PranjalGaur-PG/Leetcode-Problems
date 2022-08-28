@@ -5,9 +5,9 @@ public:
         
         if(dp[ind][buy] != -1) return dp[ind][buy];
         
-        if(buy) return dp[ind][buy] = max(-pri[ind]+rec(pri,ind+1,0,fee,dp), rec(pri,ind+1,1,fee,dp));
+        if(buy) return dp[ind][buy] = max(-pri[ind]-fee+rec(pri,ind+1,0,fee,dp), rec(pri,ind+1,1,fee,dp));
         
-        return dp[ind][buy] = max(pri[ind]-fee+rec(pri,ind+1,1,fee,dp), rec(pri,ind+1,0,fee,dp));
+        return dp[ind][buy] = max(pri[ind]+rec(pri,ind+1,1,fee,dp), rec(pri,ind+1,0,fee,dp));
     }
     
     int maxProfit(vector<int>& pri, int fee) {
