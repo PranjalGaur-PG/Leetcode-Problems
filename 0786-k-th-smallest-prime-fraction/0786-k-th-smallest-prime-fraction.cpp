@@ -1,27 +1,16 @@
 class Solution {
 public:
-    vector<int> kthSmallestPrimeFraction(vector<int>& A, int k) {
-        priority_queue<pair<double,pair<int,int>>> Q;
-        
-        for(int i=0;i<A.size();i++){
-            for(int j=A.size()-1;j>i;j--){
-                double a = (double)A[i]/(double)A[j];
-                Q.push({a,{A[i],A[j]}});
-            }
+    vector<int> kthSmallestPrimeFraction(vector<int>& A, int K) {
+        priority_queue<pair<double, pair<int,int>>>pq;
+        for(int i = 0; i < A.size(); i++)
+            pq.push({-1.0*A[i]/A.back(), {i,A.size()-1}});
+        while(--K > 0)
+        {
+            pair<int,int> cur = pq.top().second;
+            pq.pop();
+            cur.second--;
+            pq.push({-1.0*A[cur.first]/A[cur.second], {cur.first, cur.second}});
         }
-        
-        int n = Q.size();
-        while(n>k){
-            Q.pop();
-            n--;
-        }
-        
-        auto a = Q.top();
-        vector<int> ans;
-        
-        ans.push_back(a.second.first);
-        ans.push_back(a.second.second);
-        return ans;
-
+        return {A[pq.top().second.first], A[pq.top().second.second]};
     }
 };
